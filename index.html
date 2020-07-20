@@ -28,7 +28,11 @@
 			</div>
 			<div>
 				<p>{{ message }}</p>
-				<button v-on:click="reverseMessage">反转消息</button>
+				<input type="button" v-on:click="reverseMessage" value="反转消息"/>
+			</div>
+			<div>
+				<p>{{modelMessage}}</p>
+				<input type="text" v-model="modelMessage"/>
 			</div>
 		</div>
 		<script type='text/javascript'>
@@ -45,6 +49,7 @@
 				{ text: '整个牛项目' }
 			];
 			data.message = "is test reverse message";
+			data.modelMessage = "is test model message";
 			var app = new Vue({
 				el: '#app',
 				data: data,
@@ -64,7 +69,7 @@
 			});
 
 			app.color = 'isSelfblue';
-
+			app.todos.push({text:'努力学习 Vue'});
 			/*data.a = 'new test';
 			app.a = 'app new test';
 			app.$data.a = "is another test";*/
