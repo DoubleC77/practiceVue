@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="vue.js"></script>
+		<style>
+			.isSelfRed{
+				color: red;
+			}
+			.isSelfblue{
+				color: blue;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app" v-bind:title="a" >
+			{{a + ' test concat'}}
+			<br/>
+			{{ b + 1 }}
+			<div v-html="rawhtml"></div>
+			<div v-bind:class="color">这里的color是个变量,和普通的Mustache插值是一样的注入</div>
+			<div v-if="seen">这里由seen这个变量控制是否可见</div>
+			<div>
+				<ol>
+					<li v-for="todo in todos">{{todo.text}}</li>
+				</ol>
+			</div>
+			<div>
+				<p>{{ message }}</p>
+				<button v-on:click="reverseMessage">反转消息</button>
+			</div>
+		</div>
+		<script type='text/javascript'>
+			var data = {
+				a:'is test'
+				,rawhtml:'<a href=\'index.html\'>这是一个测试超链接</a>'
+				,color:'isSelfRed'
+			};
+			data.b = 2;
+			data.seen = false;
+			data.todos = [
+				{ text: '学习 JavaScript' },
+				{ text: '学习 Vue' },
+				{ text: '整个牛项目' }
+			];
+			data.message = "is test reverse message";
+			var app = new Vue({
+				el: '#app',
+				data: data,
+				methods: {
+					reverseMessage: function(){
+						this.message = this.message.split('').reverse().join('');
+					}
+				},
+				beforeCreate: function () {
+					console.log("is before create"+this.id);
+				}
+			});
+
+			app.$watch('a',function(newValue, oldValue){
+				console.log('is watch newValue:'+newValue);
+				console.log('is watch oldValue:'+oldValue);
+			});
+
+			app.color = 'isSelfblue';
+
+			/*data.a = 'new test';
+			app.a = 'app new test';
+			app.$data.a = "is another test";*/
+			
+
+
+			data.b = 'b is test';
+			app.b = 'b is test';
+		</script>
+	</body>
+</html>
