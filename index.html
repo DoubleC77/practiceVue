@@ -11,6 +11,15 @@
 			.isSelfblue{
 				color: blue;
 			}
+			.isActive{
+				background: red;
+			}
+			.test{
+				font-size: 100px;
+			}
+			.isFontSize{
+				font-size: 50px;
+			}
 		</style>
 	</head>
 	<body>
@@ -34,11 +43,41 @@
 				<p>{{modelMessage}}</p>
 				<input type="text" v-model="modelMessage"/>
 			</div>
+			<div @click="click1">	<!--这个和上面的v-on:click一样都是绑定了click事件-->
+				<div @click.stop="click2"><!--这里的stop代表,只会执行当前的div的方法,不会去执行父级div中的click1方法-->
+					is test @way click
+				</div>
+			</div>
+
+			<!--active是true还是false来决定这个样式是否生效-->
+			<!--可以在vue中绑定多个样式,并用后面的boolean属性来控制是否生效-->
+			<!--当原本的class和vue的class一样的时候会以vue中的改样式为主,即只生效vue中的样式-->
+			<div v-bind:class="{isActive: active, isFontSize: active}"
+				style="width: 200px;height: 200px;text-align: center;line-height: 200px;"
+					class="test"
+			>
+				hi vue
+			</div>
+
+			<!--也可以传一个样式数组,在里面可以写三段式,根据前面判断的boolean结果来决定后面的样式是否生效-->
+			<div v-bind:class="[ active ? 'isActive': '', 'isFontSize']"
+				 style="width: 200px;height: 200px;text-align: center;line-height: 200px;"
+				 class="test"
+			>
+				hi vue
+			</div>
+
+			<!--也可以绑定style,同样也支持三段式,不过三段式后面的要是个字符串包裹变量的形式才能生效-->
+			<div
+			v-bind:style="{color:selfColor,fontSize: active ? 'selfSize' : ''}">
+				is another vue
+			</div>
+
 		</div>
 		<script type='text/javascript'>
 			var data = {
 				a:'is test'
-				,rawhtml:'<a href=\'index.html\'>这是一个测试超链接</a>'
+				,rawhtml:'<a href=index.html>这是一个测试超链接</a>'
 				,color:'isSelfRed'
 			};
 			data.b = 2;
@@ -50,12 +89,26 @@
 			];
 			data.message = "is test reverse message";
 			data.modelMessage = "is test model message";
+
+			//控制样式是否生效
+			data.active = true;
+
+			data.selfColor = 'green';
+			data.selfSize = '200px';
 			var app = new Vue({
 				el: '#app',
 				data: data,
 				methods: {
 					reverseMessage: function(){
 						this.message = this.message.split('').reverse().join('');
+					},
+					click1: function () {
+						console.log('is test click1');
+						this.message = "is test click1";
+					},
+					click2: function () {
+						console.log('is test click2');
+						this.message = "is test click2";
 					}
 				},
 				beforeCreate: function () {
